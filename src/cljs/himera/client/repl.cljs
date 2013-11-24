@@ -19,6 +19,9 @@
       (aset out (name k) v))
     out))
 
+(defn ajax [m]
+  (.ajax js/jQuery (map->js m)))
+
 (defn go-compile [code]
   (let [data (atom nil)
         params (map->js {:url "/compile"
@@ -34,7 +37,7 @@
 (defn- on-validate [input]
   (not (empty? input)))
 
-(defn- build-msg 
+(defn- build-msg
   [title msg klass]
   (array
    (map->js {:msg (str title msg)
@@ -65,10 +68,20 @@
           (fn []
             (set! js/controller
                   (doto (js/jQuery "#console")
-                    (.console (map->js {:welcomeMessage "Himera REPL v0.2.5"
-                                        :promptLabel "cljs.user> "
+                    (.console (map->js {:welcomeMessage "Excellent REPL v0.2.5"
+                                        :promptLabel "go buddy> "
                                         :commandValidate on-validate
                                         :commandHandle on-handle
                                         :autofocus true
                                         :animateScroll true
-                                        :promptHistory true})))))))
+                                        :promptHistory true}))))
+
+            )))
+
+#_(defn ^:export save []
+  (ajax {:url "/save"
+         :data (.val (js/jQuery "#workspace"))
+         :contentType "application/clojure; charset=utf-8"
+         :type "POST"
+         :dataType "text"
+         }))

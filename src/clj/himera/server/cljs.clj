@@ -15,7 +15,7 @@
 
 (declare exp)
 
-(defn build [action locals expr opt pp]
+(defn build [action locals expr]
   {:result
    (binding [ana/*cljs-ns* 'cljs.user]
      (let [env {:ns (@ana/namespaces ana/*cljs-ns*)
@@ -29,6 +29,17 @@
 (def compilation (partial build
                           #(comp/emit-str (ana/analyze % %2))
                           (setup/load-core-names)))
+
+(defn simple-compile [expr]
+  (binding [ana/*cljs-ns* 'cljs.user]
+    (let [env {:ns (@ana/namespaces ana/*cljs-ns*)
+               :uses #{'cljs.core}
+               :context :expr
+               :locals (setup/load-core-names)
+               }
+          ]
+      (with-redefs [ana/get-expander exp]
+        (-> (ana/analyze env expr) comp/emit-str)))))
 
 (def analyze (partial build
                       #(ana/analyze % %2)

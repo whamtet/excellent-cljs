@@ -8,9 +8,12 @@
 
 (ns himera.server.app
   (:use ring.adapter.jetty)
-  (:require [himera.server.service :as himera])
+  (:require [himera.server.service :as himera]
+ ;            [prepare-cljs.core :as prepare]
+             )
   (:gen-class :main true))
 
 (defn -main
   [port]
   (run-jetty #'himera/app {:port (Integer. port)}))
+

@@ -1,3 +1,9 @@
+# Excellent
+
+A fork of [Himera](https://github.com/fogus/himera) that allows execution of compiled Clojurescript in excel.  For more details, see the parent project.
+
+Direct slurps: himera.server.service.index, excellent.spreadsheet.f
+
 # himera
 
 ClojureScript compiler as service with a simple in-browser REPL.
@@ -21,27 +27,27 @@ Then visit <http://localhost:8080/> and never stop typing.  For example, common 
 
     (map (fn [n] (* n n n)) [1 2 3 4])
 	;=> (1 8 27 64)
-	
+
 	(for [[k v] {:a 1 :b 2}] [v k])
 	;=> ([1 :a] [2 :b])
-	
+
 	(if (< x 10) :less :more)
 	;=> :less
-	
+
 	(defn sqr [n] (* n n))
-	
+
 	(map sqr [1 2 3])
 	;=> (1 4 9)
-	
+
 	(deftype Cons [h t])
-	
+
 	(.-t (Cons. 1 108))
 	;=> 108
-	
+
 	(defmulti classify-age :age)
-	
+
 	(defmethod classify-age 36 [_] :ancient)
-	
+
 	(classify-age {:age 36})
 	;=> :ancient
 ```
@@ -51,10 +57,10 @@ To use [jQuery](http://jquery.com) from the Himera REPL, try the following:
 ```clojure
 
     (def anchor (js/jQuery "a"))
-	
+
 	(.text anchor)
 	;=> "Source..."
-	
+
 	(.text anchor "Github repo...")
 ```
 
@@ -65,7 +71,7 @@ To exercise the compilation service from the command line, try the following:
     $ curl -X POST -H "Content-Type: application/clojure" \
 	    -d '{:expr ((fn foo [x] (js/alert x)) 42)}' \
 		http://localhost:8080/compile
-	
+
 	#=> {:js "(function foo(x){\nreturn alert.call(null,x);\n}).call(null,42)"}
 ```
 
