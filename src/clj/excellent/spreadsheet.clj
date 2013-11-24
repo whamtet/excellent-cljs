@@ -36,8 +36,12 @@
     (list* [(count lines)] (map vector lines))))
 
 (defn hssf []
-  (try (excel/workbook-hssf "numbers.xls")
-    (catch java.io.FileNotFoundException e (excel/workbook-hssf))))
+  (excel/workbook-hssf "resources/public/numbers.xls"))
+#_(defn hssf []
+  (try (excel/workbook-hssf "resources/public/numbers.xls")
+    (catch java.io.FileNotFoundException e
+      (println "creating new")
+      (excel/workbook-hssf))))
 
 (defn make-excel
   ([] (excel/save (make-excel nil) "numbers.xls"))
