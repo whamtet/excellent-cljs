@@ -57,7 +57,8 @@
     (.toByteArray os)))
 
 (defn get-excel [s]
-  {:status 200
-   :headers {"Content-Type" "application/msexcel"}
-   :body (java.io.ByteArrayInputStream. (get-excel-bytes s))
-   })
+  (let [bytes (get-excel-bytes s)]
+    {:status 200
+     :headers {"Content-Type" "application/msexcel" "Content-Length" (str (alength bytes))}
+     :body (java.io.ByteArrayInputStream. bytes)
+     }))

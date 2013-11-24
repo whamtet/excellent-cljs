@@ -2,8 +2,6 @@
 
 A fork of [Himera](https://github.com/fogus/himera) that allows execution of compiled Clojurescript in excel.  For more details, see the parent project.
 
-Direct slurps: himera.server.service.index, excellent.spreadsheet.f
-
 # himera
 
 ClojureScript compiler as service with a simple in-browser REPL.
