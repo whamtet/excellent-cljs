@@ -25,7 +25,7 @@
 (defn clj-str->js [s]
   (map cljs/simple-compile (read-strings s)))
 
-(def f "resources/public/main.js")
+(def f "resources/public/basis.js")
 (def lines (-> f slurp (.split "\n")))
 
 (defn make-cells [lines-to-add]
