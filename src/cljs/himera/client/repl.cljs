@@ -34,6 +34,24 @@
     (.ajax js/jQuery params)
     @data))
 
+(defn simple-compile [code]
+  (let [data (atom nil)
+        params (map->js {:url "/simplecompile"
+                         :data code
+                         :contentType "shit"
+                         :async false
+                         :type "POST"
+                         :dataType "text"
+                         :success #(reset! data % #_(reader/read-string %))})]
+    (.ajax js/jQuery params)
+    @data))
+
+(defn load-workspace []
+  (let [
+        code (.val (js/jQuery "#workspace"))
+        ]
+    (js/eval (simple-compile code))))
+
 (defn- on-validate [input]
   (not (empty? input)))
 
@@ -62,6 +80,11 @@
           (build-msg "" (pr-str (js/eval (:js compiled))) "jquery-console-message-value")
           (catch js/Error e
             (build-msg "Compilation error: " e "jquery-console-message-error")))))))
+
+(defn- on-handle2 [line report]
+  (.log js/console line)
+  (.log js/console report)
+  (on-handle line report))
 
 (defn ^:export go []
   (.ready (js/jQuery js/document)

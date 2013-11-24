@@ -56,26 +56,33 @@
 (defn get-html [code]
   (format (index2) "width: 100%;" code))
 (load "service")
-(defroutes handler
 
+(defroutes handler
   (GET "/" [oldcode] (get-html (or oldcode "")))
   (POST "/" [file] (get-html file))
 
   (PUT "/" [name]
        (generate-response {:hello name}))
 
+  (POST "/simplecompile" [s]
+        (apply-interpose "\n" (spreadsheet/clj-str->js s)))
+
   (POST "/compile" [expr]
         (condp = (-> expr str .trim)
           ;"excel" (redirect "/spreadsheet.xls")
           "excel" (straight-js "spreadsheet()")
           "save" (straight-js "save()")
-          (generate-js-response (cljs/compilation expr
-                                                  )))
+          "load" (straight-js "himera.client.repl.load_workspace()")
+          "copy" (straight-js "s = jQuery('#workspace').val()")
+          "clear-save" (straight-js "save(); jQuery('#workspace').val('')")
+          "clear" (straight-js "jQuery('#workspace').val('')")
+          (generate-js-response (cljs/compilation expr)))
         )
   (POST "/save.clj" [savetext] (save/save savetext))
 
   #_(GET "/spreadsheet.xls" []
        (spreadsheet/get-excel))
+
   (POST "/spreadsheet.xls" [toappend] (spreadsheet/get-excel toappend))
 
   (route/resources "/"))
@@ -112,10 +119,22 @@
         (handler req))
       )))
 
+(defn- shit-request?
+  [req]
+  (= "shit" (-> req :content-type)))
+
+(defn my-wrapper
+  [handler]
+  (fn [req]
+    (if (shit-request? req)
+      (handler (assoc req :params {:s (slurp (:body req))}))
+      (handler req))))
+
 (def app
   (-> handler
      ; wrap-spy
       multipart/wrap-multipart-params
       wrap-clj-params
+      my-wrapper
       ))
 
