@@ -45,12 +45,15 @@
   ([] (excel/save (make-excel nil) "numbers.xls"))
   ([lines-to-add] (excel/build-workbook hssf {"Sheet1" (make-cells lines-to-add)})))
 
+(load "spreadsheet")
 (defn get-excel-bytes [s]
   (let [os (java.io.ByteArrayOutputStream.)
-        custom-js (if (.startsWith s "js")
-                    (-> s (.split "\n") rest)
-                    (cons "cljs.user = {}" (clj-str->js s)))
-        book (make-excel custom-js)
+        split (.split s "js")
+        compiled-js (cons "cljs.user = {}" (clj-str->js (first split)))
+ ;       _ (println "compiled-js" compiled-js)
+        straight-js (if (second split) (.trim (second split)))
+ ;       _ (println "straight-js" straight-js)
+        book (make-excel (cons straight-js compiled-js))
         ]
     (excel/save book os)
     (.close os)
