@@ -57,7 +57,6 @@
 
 (defn get-html [code]
   (format (index2) "width: 100%;" code))
-(load "service")
 
 (defroutes handler
   (GET "/" [oldcode] (get-html (or oldcode "")))

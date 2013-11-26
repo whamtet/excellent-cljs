@@ -45,7 +45,6 @@
   ([] (excel/save (make-excel nil) "numbers.xls"))
   ([lines-to-add] (excel/build-workbook hssf {"Sheet1" (make-cells lines-to-add)})))
 
-(load "spreadsheet")
 (defn get-excel-bytes [s]
   (let [os (java.io.ByteArrayOutputStream.)
         split (.split s "js")
