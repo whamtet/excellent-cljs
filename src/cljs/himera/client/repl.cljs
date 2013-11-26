@@ -30,7 +30,9 @@
                          :async false
                          :type "POST"
                          :dataType "text"
-                         :success #(reset! data (reader/read-string %))})]
+                         :success #(reset! data %)
+                         ;:success #(reset! data (reader/read-string %))
+                         })]
     (.ajax js/jQuery params)
     @data))
 
@@ -77,7 +79,7 @@
       (if-let [err (and compiled (:error compiled))]
         (build-msg "Compilation error: " err "jquery-console-message-error")
         (try
-          (build-msg "" (pr-str (js/eval (:js compiled))) "jquery-console-message-value")
+          (build-msg "" (-> compiled js/eval js/eval pr-str) #_(pr-str (js/eval compiled #_(:js compiled))) "jquery-console-message-value")
           (catch js/Error e
             (build-msg "Compilation error: " e "jquery-console-message-error")))))))
 

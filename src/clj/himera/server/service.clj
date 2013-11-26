@@ -25,11 +25,13 @@
     {:status (or status 200)
      :headers {"Content-Type" "application/clojure; charset=utf-8"}
      :body ret-val}))
-
+(load "service")
 (def generate-js-response (partial generate-response
                                    (fn [data]
                                      (let [code (or (:result data) "'HIMERA ERROR: NOTHING GENERATED'")]
-                                       (pr-str {:js (string/trim-newline code)})))))
+                                       ;(pr-str {:js (string/trim-newline code)})
+                                       (pr-str code)
+                                       ))))
 
 (def generate-ast-response (partial generate-response
                                     (fn [data]
