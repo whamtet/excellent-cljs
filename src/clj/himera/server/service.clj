@@ -40,7 +40,7 @@
 (defn straight-js [js]
   {:status 200
    :headers {"Content-Type" "application/clojure; charset=utf-8"}
-   :body (pr-str {:js (string/trim-newline js)})})
+   :body (pr-str (string/trim-newline js))})
 
 (defn redirect [url]
   (straight-js (format "window.location = '%s'" url)))
