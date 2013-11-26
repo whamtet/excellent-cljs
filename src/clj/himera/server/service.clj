@@ -30,7 +30,7 @@
                                    (fn [data]
                                      (let [code (or (:result data) "'HIMERA ERROR: NOTHING GENERATED'")]
                                        ;(pr-str {:js (string/trim-newline code)})
-                                       (pr-str code)
+                                       code
                                        ))))
 
 (def generate-ast-response (partial generate-response
@@ -40,7 +40,7 @@
 (defn straight-js [js]
   {:status 200
    :headers {"Content-Type" "application/clojure; charset=utf-8"}
-   :body (pr-str (string/trim-newline js))})
+   :body (string/trim-newline js)})
 
 (defn redirect [url]
   (straight-js (format "window.location = '%s'" url)))
