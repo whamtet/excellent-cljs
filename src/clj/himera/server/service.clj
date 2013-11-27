@@ -14,6 +14,7 @@
   (:require [excellent.multipart :as multipart])
 ;  (:use ring.middleware.clj-params)
   (:require [clojure.string :as string])
+  (:require clojure.edn)
   (:require [himera.server.cljs :as cljs]
             [compojure.route :as route]
             [ring.util.response :as resp]
@@ -25,7 +26,7 @@
     {:status (or status 200)
      :headers {"Content-Type" "application/clojure; charset=utf-8"}
      :body ret-val}))
-(load "service")
+
 (def generate-js-response (partial generate-response
                                    (fn [data]
                                      (let [code (or (:result data) "'HIMERA ERROR: NOTHING GENERATED'")]
@@ -36,6 +37,7 @@
 (def generate-ast-response (partial generate-response
                                     (fn [data]
                                       (pr-str {:ast (:result data)}))))
+
 
 (defn straight-js [js]
   {:status 200
@@ -56,11 +58,32 @@
 
 
 (defn get-html [code]
-  (format (index2) "width: 100%;" code))
+  (format (index2) code)
+  ;(index2)
+  )
+
+(defn pr-str2 [s]
+  (let [
+        s (pr-str s)
+        ]
+    (.substring s 1 (dec (count s)))))
+
+(defn tab-js [vals]
+  (if (> (count vals) 0)
+    (apply str
+      (cons
+       (format "excellent.io.set_latest_tab('%s');\n" (pr-str2 (first vals)))
+       (map #(format "excellent.io.add_tab('%s');\n" (pr-str2 %)) (rest vals))))
+    ""))
+
+(defn tab-js2 [file]
+  (let [m (clojure.edn/read-string file)]
+    (tab-js (vals m))))
+
 
 (defroutes handler
-  (GET "/" [oldcode] (get-html (or oldcode "")))
-  (POST "/" [file] (get-html file))
+  (GET "/" [] (get-html ""))
+  (POST "/" [file] (get-html (tab-js2 file)))
 
   (PUT "/" [name]
        (generate-response {:hello name}))
@@ -69,7 +92,8 @@
         (apply-interpose "\n" (spreadsheet/clj-str->js s)))
 
   (POST "/compile" [expr]
-        (condp = (-> expr str .trim)
+        (generate-js-response (cljs/compilation expr))
+        #_(condp = (-> expr str .trim)
           ;"excel" (redirect "/spreadsheet.xls")
           "excel" (straight-js "spreadsheet()")
           "save" (straight-js "save()")
@@ -81,8 +105,7 @@
         )
   (POST "/save.clj" [savetext] (save/save savetext))
 
-  #_(GET "/spreadsheet.xls" []
-       (spreadsheet/get-excel))
+  (POST "/excel.xls" [exceltext] (spreadsheet/get-excel2 exceltext))
 
   (POST "/spreadsheet.xls" [toappend] (spreadsheet/get-excel toappend))
 

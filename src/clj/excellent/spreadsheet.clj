@@ -45,13 +45,15 @@
   ([] (excel/save (make-excel nil) "numbers.xls"))
   ([lines-to-add] (excel/build-workbook hssf {"Sheet1" (make-cells lines-to-add)})))
 
+
 (defn get-excel-bytes [s]
   (let [os (java.io.ByteArrayOutputStream.)
-        split (.split s "js")
+        ;_ (println "s" s)
+        split (.split s "js-here")
         compiled-js (cons "cljs.user = {}" (clj-str->js (first split)))
- ;       _ (println "compiled-js" compiled-js)
+        ;_ (println "compiled-js" compiled-js)
         straight-js (if (second split) (.trim (second split)))
- ;       _ (println "straight-js" straight-js)
+        ;_ (println "straight-js" straight-js)
         book (make-excel (cons straight-js compiled-js))
         ]
     (excel/save book os)
@@ -64,3 +66,29 @@
      :headers {"Content-Type" "application/msexcel" "Content-Length" (str (alength bytes))}
      :body (java.io.ByteArrayInputStream. bytes)
      }))
+
+;;new spreadsheet stuff
+
+(defn try-double [d]
+  (try (Double/parseDouble d)
+    (catch java.lang.NumberFormatException e d)))
+
+(defn split-line [line]
+  (map try-double (re-seq #"\w+" line)))
+
+(defn split-lines [s]
+  (map split-line (.split s "\n")))
+
+(defn get-excel2 [s]
+  (let [os (java.io.ByteArrayOutputStream.)
+        book (excel/build-workbook (excel/workbook-hssf) {"Sheet1" (split-lines s)})
+        ]
+    (excel/save book os)
+    (.close os)
+    (let [
+          bytes (.toByteArray os)]
+      {:status 200
+       :headers {"Content-Type" "application/msexcel" "Content-Length" (str (alength bytes))}
+       :body (java.io.ByteArrayInputStream. bytes)
+       })))
+

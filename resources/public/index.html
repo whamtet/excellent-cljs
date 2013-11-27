@@ -10,7 +10,7 @@ remove this notice, or any other, from this software.
 
 <html>
 <head>
-  <script type="text/javascript" src="vendor/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
   <script type="text/javascript" src="vendor/jquery.console.js"></script>
   <script type="text/javascript" src="js/repl.js"></script>
   <script type="text/javascript">
@@ -20,6 +20,7 @@ remove this notice, or any other, from this software.
   <link rel="stylesheet" type="text/css" href="stylesheets/layout.css" />
   <link rel="stylesheet" type="text/css" href="stylesheets/skeleton.css" />
   <link rel="stylesheet" type="text/css" href="stylesheets/himera.css" />
+  <link rel="stylesheet" type="text/css" href="stylesheets/tabs.css" />
   <title>Excellent</title>
 </head>
 <body>
@@ -28,7 +29,7 @@ remove this notice, or any other, from this software.
 
     <h1 id="title">Excellent</h1>
 
-    <h2>Clojurescript targeting Excel</h2>
+    <h2>Better than Excel</h2>
 
     <div class="console" id="console"></div>
       <br />
@@ -36,7 +37,11 @@ remove this notice, or any other, from this software.
         <input type="file" name="file" id="file" value="Select Source File">
         <input type="submit" value="Load">
       </form>
-      <textarea id="workspace" style="%s" rows="40">%s</textarea>
+      <ul id="tabul">
+        <li id="litab" class="ntabs add"><a href="" id="addtab">+</a></li>
+      </ul>
+      <div id="tabcontent"></div>
+
       </div>
     <form action="/save.clj" method="post" id="saveform" enctype="multipart/form-data">
         <input type="hidden" name="savetext" id="savetext">
@@ -46,17 +51,18 @@ remove this notice, or any other, from this software.
         <input type="hidden" name="toappend" id="toappend">
         </input>
     </form>
+    <form action="/excel.xls" method="post" id="excelform" enctype="multipart/form-data">
+        <input type="hidden" name="exceltext" id="exceltext">
+        </input>
+    </form>
 
     <script>
-        save = function() {
-            $('#savetext').val($('#workspace').val())
-            $('#saveform').submit()
-        }
         spreadsheet = function() {
             $('#toappend').val($('#workspace').val())
             $('#spreadsheetform').submit()
         }
     </script>
+
     <!--
     <div class="source">
       <p><a href="http://github.com/fogus/himera">View source on Github <img src="images/github-icon.png" /></a></p>
@@ -70,5 +76,9 @@ remove this notice, or any other, from this software.
   goog.provide('cljs.user')
 </script>
 
+<script type="text/javascript" id="tab_loading_script">
+    addtabs = function(){%s}
+</script>
+<script type="text/javascript" src="vendor/tabs.js"></script>
 </body>
 </html>

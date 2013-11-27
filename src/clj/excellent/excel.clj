@@ -260,14 +260,13 @@
                 (.createSheet wb sheetname)
                 (.createSheet wb))]
     (merge-rows sheet 0 rows)))
-
 (defn build-workbook
   "Build workbook from map of sheet names to multi dimensional seqs (ie a seq of seq)."
   ([wb wb-map]
      (let [cache (caching-style-builder wb)]
        (doseq [[sheetname rows] wb-map]
          (let [sheet-index (.getSheetIndex wb sheetname)]
-           (if (not= -1 sheet-index)
+           (if (< sheet-index 0)
              (.removeSheetAt wb sheet-index)))
          (build-sheet wb (str sheetname) (create-sheet-data-style cache rows)))
        wb))
