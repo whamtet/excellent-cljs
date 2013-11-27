@@ -36,6 +36,14 @@
 		display: block; }
 	body {
 		line-height: 1; }
+  /* matt */
+  div.container {
+    width: 100%;
+  }
+  html, body {
+    width:100%;
+  }
+  /*end matt*/
 	ol, ul {
 		list-style: none; }
 	blockquote, q {
