@@ -10,7 +10,7 @@
     (add-tab val)))
 
 (defn split-line [line]
-  (re-seq #"\w+" line))
+  (or (re-seq #"\w+" line) ()))
 
 (defn ^:export grid-slurp [i]
   (map split-line (.split (slurp i) "\n")))

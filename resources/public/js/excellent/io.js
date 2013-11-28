@@ -14,7 +14,12 @@ if(cljs.core.truth_(cljs.core.deref.call(null,excellent.io.tabs).call(null,i)))
 });
 goog.exportSymbol('excellent.io.spit', excellent.io.spit);
 excellent.io.split_line = (function split_line(line){
-return cljs.core.re_seq.call(null,/\w+/,line);
+var or__3943__auto__ = cljs.core.re_seq.call(null,/\w+/,line);
+if(cljs.core.truth_(or__3943__auto__))
+{return or__3943__auto__;
+} else
+{return cljs.core.List.EMPTY;
+}
 });
 excellent.io.grid_slurp = (function grid_slurp(i){
 return cljs.core.map.call(null,excellent.io.split_line,excellent.io.slurp.call(null,i).split("\n"));
@@ -27,25 +32,25 @@ return jQuery("#excelform").submit();
 goog.exportSymbol('excellent.io.excel', excellent.io.excel);
 excellent.io.tabs = cljs.core.atom.call(null,cljs.core.PersistentHashSet.EMPTY);
 excellent.io.save_map = (function save_map(){
-return cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,(function (){var iter__3008__auto__ = (function iter__5158(s__5159){
+return cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,(function (){var iter__3008__auto__ = (function iter__3537(s__3538){
 return (new cljs.core.LazySeq(null,false,(function (){
-var s__5159__$1 = s__5159;
+var s__3538__$1 = s__3538;
 while(true){
-var temp__4092__auto__ = cljs.core.seq.call(null,s__5159__$1);
+var temp__4092__auto__ = cljs.core.seq.call(null,s__3538__$1);
 if(temp__4092__auto__)
-{var s__5159__$2 = temp__4092__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__5159__$2))
-{var c__3006__auto__ = cljs.core.chunk_first.call(null,s__5159__$2);
+{var s__3538__$2 = temp__4092__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__3538__$2))
+{var c__3006__auto__ = cljs.core.chunk_first.call(null,s__3538__$2);
 var size__3007__auto__ = cljs.core.count.call(null,c__3006__auto__);
-var b__5161 = cljs.core.chunk_buffer.call(null,size__3007__auto__);
-if((function (){var i__5160 = 0;
+var b__3540 = cljs.core.chunk_buffer.call(null,size__3007__auto__);
+if((function (){var i__3539 = 0;
 while(true){
-if((i__5160 < size__3007__auto__))
-{var i = cljs.core._nth.call(null,c__3006__auto__,i__5160);
-cljs.core.chunk_append.call(null,b__5161,cljs.core.PersistentVector.fromArray([i,excellent.io.slurp.call(null,i)], true));
+if((i__3539 < size__3007__auto__))
+{var i = cljs.core._nth.call(null,c__3006__auto__,i__3539);
+cljs.core.chunk_append.call(null,b__3540,cljs.core.PersistentVector.fromArray([i,excellent.io.slurp.call(null,i)], true));
 {
-var G__5162 = (i__5160 + 1);
-i__5160 = G__5162;
+var G__3541 = (i__3539 + 1);
+i__3539 = G__3541;
 continue;
 }
 } else
@@ -54,13 +59,13 @@ continue;
 break;
 }
 })())
-{return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__5161),iter__5158.call(null,cljs.core.chunk_rest.call(null,s__5159__$2)));
+{return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__3540),iter__3537.call(null,cljs.core.chunk_rest.call(null,s__3538__$2)));
 } else
-{return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__5161),null);
+{return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__3540),null);
 }
 } else
-{var i = cljs.core.first.call(null,s__5159__$2);
-return cljs.core.cons.call(null,cljs.core.PersistentVector.fromArray([i,excellent.io.slurp.call(null,i)], true),iter__5158.call(null,cljs.core.rest.call(null,s__5159__$2)));
+{var i = cljs.core.first.call(null,s__3538__$2);
+return cljs.core.cons.call(null,cljs.core.PersistentVector.fromArray([i,excellent.io.slurp.call(null,i)], true),iter__3537.call(null,cljs.core.rest.call(null,s__3538__$2)));
 }
 } else
 {return null;
@@ -77,14 +82,14 @@ return console.log(cljs.core.pr_str.call(null,excellent.io.save_map.call(null)))
 });
 goog.exportSymbol('excellent.io.test', excellent.io.test);
 excellent.io.close_tab = (function close_tab(i){
-return cljs.core.swap_BANG_.call(null,excellent.io.tabs,(function (p1__5163_SHARP_){
-return cljs.core.disj.call(null,p1__5163_SHARP_,i);
+return cljs.core.swap_BANG_.call(null,excellent.io.tabs,(function (p1__3542_SHARP_){
+return cljs.core.disj.call(null,p1__3542_SHARP_,i);
 }));
 });
 goog.exportSymbol('excellent.io.close_tab', excellent.io.close_tab);
 excellent.io.open_tab = (function open_tab(i){
-return cljs.core.swap_BANG_.call(null,excellent.io.tabs,(function (p1__5164_SHARP_){
-return cljs.core.conj.call(null,p1__5164_SHARP_,i);
+return cljs.core.swap_BANG_.call(null,excellent.io.tabs,(function (p1__3543_SHARP_){
+return cljs.core.conj.call(null,p1__3543_SHARP_,i);
 }));
 });
 goog.exportSymbol('excellent.io.open_tab', excellent.io.open_tab);
