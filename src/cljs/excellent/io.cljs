@@ -10,10 +10,16 @@
     (add-tab val)))
 
 (defn split-line [line]
-  (or (re-seq #"\w+" line) ()))
+  (or (re-seq #"[\w\.]+" line) ()))
+
+(defn double-map [f grid]
+  (map #(map f %) grid))
 
 (defn ^:export grid-slurp [i]
   (map split-line (.split (slurp i) "\n")))
+
+(defn ^:export grid-slurp-num [i]
+  (double-map #(js/Number %) (grid-slurp i)))
 
 (defn ^:export excel [i]
   (.val (js/jQuery "#exceltext") (slurp i))
