@@ -35,13 +35,16 @@
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 		display: block; }
 	body {
-		line-height: 1; }
+		line-height: 1;
+  }
   /* matt */
   div.container {
     width: 100%;
   }
   html, body {
-    width:100%;
+    width:98%;
+    padding: 10px;
+
   }
   /*end matt*/
 	ol, ul {
