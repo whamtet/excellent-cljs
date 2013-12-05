@@ -279,21 +279,23 @@
 
         ////////////////////////////////////////////////////////////////////////
         // Handle key press
-        typer.keypress(function(e){
+        typer.keypress(function(e) {
+
             var keyCode = e.keyCode || e.which;
             if (isIgnorableKey(e)) {
                 return false;
             }
-          // // C-v: don't insert on paste event
+            // // C-v: don't insert on paste event
             if ((e.ctrlKey || e.metaKey) && String.fromCharCode(keyCode).toLowerCase() == 'v') {
               return true;
             }
-            if (acceptInput && cancelKeyPress != keyCode && keyCode >= 32){
+            if (acceptInput && cancelKeyPress != keyCode && keyCode >= 32) {
                 if (cancelKeyPress) return false;
                 if (typeof config.charInsertTrigger == 'undefined' ||
                     (typeof config.charInsertTrigger == 'function' &&
-                     config.charInsertTrigger(keyCode,promptText)))
+                     config.charInsertTrigger(keyCode,promptText))) {
                     typer.consoleInsert(keyCode);
+                }
             }
             if ($.browser.webkit) return false;
         });
@@ -517,6 +519,7 @@
         // Move to another column relative to this one
         // Negative means go back, positive means go forward.
         function moveColumn(n){
+//            if (column + n >= 0) {
             if (column + n >= 0 && column + n <= promptText.length){
                 column += n;
                 return true;
@@ -597,6 +600,7 @@
         ////////////////////////////////////////////////////////////////////////
         // Update the prompt display
         function updatePromptDisplay(){
+            //console.log('updatePromptDisplay')
             var line = promptText;
             var html = '';
             if (column > 0 && line == ''){
@@ -623,6 +627,7 @@
             prompt.html(html);
             scrollToBottom();
         };
+        window.u = updatePromptDisplay
 
         // Simple HTML encoding
         // Simply replace '<', '>' and '&'

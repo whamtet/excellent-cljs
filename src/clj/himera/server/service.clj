@@ -12,6 +12,7 @@
   (:require compojure.handler)
   ;(:require [ring.middleware.multipart-params :as multipart-params])
   (:require [excellent.multipart :as multipart])
+  (:use clojure.repl)
 ;  (:use ring.middleware.clj-params)
   (:require [clojure.string :as string])
   (:require clojure.edn)
@@ -80,6 +81,16 @@
   (let [m (clojure.edn/read-string file)]
     (tab-js (vals m))))
 
+(defn doc-str [f]
+  (eval `(with-out-str (doc ~f))))
+
+#_(defn doc-str-js [f]
+  (format "alert(%s)" (pr-str (doc-str f))))
+
+(defn doc-str-js [f]
+  (-> f doc-str (.replace "\n" " ") (.replace "-" "") .trim pr-str))
+
+
 
 (defroutes handler
   (GET "/" [] (get-html ""))
@@ -92,7 +103,14 @@
         (apply-interpose "\n" (spreadsheet/clj-str->js s)))
 
   (POST "/compile" [expr]
-        (generate-js-response (cljs/compilation expr))
+        (if (list? expr)
+          (let [[doc f :as expr] expr]
+            (if (= 'doc doc)
+              ;"console.log('hi\nthere')"
+              ;(pr-str (doc-str f))
+              (doc-str-js f)
+              (generate-js-response (cljs/compilation expr))))
+          (generate-js-response (cljs/compilation expr)))
         #_(condp = (-> expr str .trim)
           ;"excel" (redirect "/spreadsheet.xls")
           "excel" (straight-js "spreadsheet()")
