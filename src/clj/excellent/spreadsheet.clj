@@ -73,8 +73,9 @@
   (try (Double/parseDouble d)
     (catch java.lang.NumberFormatException e d)))
 
+
 (defn split-line [line]
-  (map try-double (re-seq #"\w+" line)))
+  (map try-double (re-seq #"[\w\.]+" line)))
 
 (defn split-lines [s]
   (map split-line (.split s "\n")))

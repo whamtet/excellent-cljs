@@ -3030,7 +3030,8 @@ net.brehaut.ClojureTools = (function (SH) {
 })(SyntaxHighlighter);
 </script><title>himera -- Marginalia</title></head><body><table><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#excellent.io" name="excellent.io"><h1 class="project-name">excellent.io</h1><a class="toc-link" href="toc.html">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns excellent.io
-  (:require [himera.client.repl :as repl]))</pre></td></tr><tr><td class="docs"><p>Slurp contents from tab i.</p>
+  (:require [himera.client.repl :as repl]
+            [cljs.reader :as reader]))</pre></td></tr><tr><td class="docs"><p>Slurp contents from tab i.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:export slurp
   [i]
   (-&gt;&gt; i (str &quot;#workspace&quot;) js/jQuery .val))</pre></td></tr><tr><td class="docs"><p>Spit val into tab i.</p>
@@ -3048,10 +3049,19 @@ net.brehaut.ClojureTools = (function (SH) {
   (map split-line (.split (slurp i) &quot;\n&quot;)))</pre></td></tr><tr><td class="docs"><p>Slurp tab i into a two-dimensional grid of numbers.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:export grid-slurp-num
   [i]
-  (double-map js/Number (grid-slurp i)))</pre></td></tr><tr><td class="docs"><p>Download excel spreadsheet with contents from tab i.</p>
+  (double-map js/Number (grid-slurp i)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn apply-interpose [delimiter seq]
+  (apply str (interpose delimiter seq)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn convert-list [l]
+  (let [
+        l (reader/read-string l)
+        ]
+    (if (coll? (first l))
+      (apply-interpose &quot;\n&quot; (map #(apply-interpose &quot; &quot; %) l))
+      (apply-interpose &quot; &quot; l))))</pre></td></tr><tr><td class="docs"><p>Download excel spreadsheet with contents from tab i.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:export excel
-  [i]
-  (.val (js/jQuery &quot;#exceltext&quot;) (slurp i))
+  [i is-list?]
+  (.val (js/jQuery &quot;#exceltext&quot;) (if is-list? (convert-list (slurp i)) (slurp i)))
   (.submit (js/jQuery &quot;#excelform&quot;)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def tabs (atom #{}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn save-map []

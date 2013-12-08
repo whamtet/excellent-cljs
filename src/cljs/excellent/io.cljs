@@ -1,5 +1,7 @@
 (ns excellent.io
-  (:require [himera.client.repl :as repl]))
+  (:require [himera.client.repl :as repl]
+            [cljs.reader :as reader]))
+
 
 (defn ^:export slurp
   "Slurp contents from tab i."
@@ -29,10 +31,21 @@
   [i]
   (double-map js/Number (grid-slurp i)))
 
+(defn apply-interpose [delimiter seq]
+  (apply str (interpose delimiter seq)))
+
+(defn convert-list [l]
+  (let [
+        l (reader/read-string l)
+        ]
+    (if (coll? (first l))
+      (apply-interpose "\n" (map #(apply-interpose " " %) l))
+      (apply-interpose " " l))))
+
 (defn ^:export excel
   "Download excel spreadsheet with contents from tab i."
-  [i]
-  (.val (js/jQuery "#exceltext") (slurp i))
+  [i is-list?]
+  (.val (js/jQuery "#exceltext") (if is-list? (convert-list (slurp i)) (slurp i)))
   (.submit (js/jQuery "#excelform")))
 
 
