@@ -2,6 +2,11 @@
   (:require [himera.client.repl :as repl]
             [cljs.reader :as reader]))
 
+(defn- map->js [m]
+  (let [out (js-obj)]
+    (doseq [[k v] m]
+      (aset out (name k) v))
+    out))
 
 (defn ^:export slurp
   "Slurp contents from tab i."
@@ -71,6 +76,8 @@
   (.val (js/jQuery "#savetext") (pr-str (save-map)))
   (.submit (js/jQuery "#saveform")))
 
+
+
 (defn ^:export set-latest-tab [val]
   (.val (js/jQuery (str "#workspace" js/total_tabs)) val))
 
@@ -87,3 +94,35 @@
   "Load contents of tab i as javascript."
   [i]
   (js/eval (slurp i)))
+
+
+(defn ^:export list-files []
+  (let [data (atom nil)
+        params (map->js {:url "/listfiles"
+                         :async false
+                         :type "GET"
+                         :success #(reset! data %)})]
+    (.ajax js/jQuery params)
+    @data))
+
+(defn ^:export db-spit [name val]
+  (let [
+        params (map->js {:url "/spit"
+                         :data (map->js {:name name :str val})
+                         :type "POST"
+                         }
+                        )]
+    (.ajax js/jQuery params)))
+
+
+(defn ^:export db-slurp [name]
+  (let [data (atom nil)
+        params (map->js {
+                         :url (str "/slurp?name=" name)
+                         :async false
+                         :type "GET"
+                         :success #(reset! data %)
+                         })]
+    (.ajax js/jQuery params)
+    @data))
+

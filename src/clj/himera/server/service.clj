@@ -20,6 +20,7 @@
             [compojure.route :as route]
             [ring.util.response :as resp]
             [excellent.spreadsheet :as spreadsheet]
+            [excellent.db :as db]
             [excellent.save :as save]))
 
 (defn generate-response [transformer data & [status]]
@@ -57,7 +58,6 @@
 (def index (slurp "resources/public/index.html"))
 (defn index2 [] (slurp "resources/public/index.html"))
 
-
 (defn get-html [code]
   (format (index2) code)
   ;(index2)
@@ -90,9 +90,8 @@
 (defn doc-str-js [f]
   (-> f doc-str (.replace "\n" " ") (.replace "-" "") .trim pr-str))
 
-
-
 (defroutes handler
+  (GET "/env" [] db/iron-cache-token)
   (GET "/" [] (get-html ""))
   (POST "/" [file] (get-html (tab-js2 file)))
 
@@ -101,6 +100,17 @@
 
   (POST "/simplecompile" [s]
         (apply-interpose "\n" (spreadsheet/clj-str->js s)))
+
+  (GET "/listfiles" [] (apply-interpose " " (db/get-all)))
+
+  (POST "/spit" [name str]
+        (println name)
+        (println str)
+        (db/save name str)
+        "")
+
+  (GET "/slurp" [name]
+       (db/load-str name))
 
   (POST "/compile" [expr]
         (if (list? expr)
@@ -129,7 +139,7 @@
 
   (route/resources "/"))
 
-#_(defn wrap-spy [handler]
+(defn wrap-spy [handler]
   (fn [request]
     (println "-------------------------------")
     (println "Incoming Request:")
@@ -168,15 +178,20 @@
 (defn my-wrapper
   [handler]
   (fn [req]
-    (if (shit-request? req)
+    (if (-> req :uri (= "/simplecompile"))
       (handler (assoc req :params {:s (slurp (:body req))}))
       (handler req))))
 
 (def app
   (-> handler
-     ; wrap-spy
+      ;wrap-spy
       multipart/wrap-multipart-params
       wrap-clj-params
       my-wrapper
       ))
+
+(load "service")
+
+
+
 

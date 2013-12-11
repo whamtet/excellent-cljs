@@ -18,6 +18,7 @@
                  [domina "1.0.1"]
                  ;[org.clojure/clojurescript "0.0-2014"]
                  [org.clojure/clojurescript "0.0-1847"]
+                 [com.novemberain/monger "1.5.0"]
                  ]
   :plugins [[lein-cljsbuild "0.3.2"]]
   :dev-dependencies [[jline "0.9.94"]
