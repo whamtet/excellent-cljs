@@ -15,7 +15,7 @@
   (:use clojure.repl)
 ;  (:use ring.middleware.clj-params)
   (:require [clojure.string :as string])
-  (:require clojure.edn)
+  (:require clojure.edn )
   (:require [himera.server.cljs :as cljs]
             [compojure.route :as route]
             [ring.util.response :as resp]
@@ -139,7 +139,7 @@
 
   (route/resources "/"))
 
-(defn wrap-spy [handler]
+#_(defn wrap-spy [handler]
   (fn [request]
     (println "-------------------------------")
     (println "Incoming Request:")
