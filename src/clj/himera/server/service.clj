@@ -8,20 +8,21 @@
 
 (ns himera.server.service
   (:use compojure.core)
-  ;(:use ring.middleware.params)
   (:require compojure.handler)
-  ;(:require [ring.middleware.multipart-params :as multipart-params])
   (:require [excellent.multipart :as multipart])
-  (:use clojure.repl)
-;  (:use ring.middleware.clj-params)
   (:require [clojure.string :as string])
-  (:require clojure.edn )
+  (:require clojure.edn)
   (:require [himera.server.cljs :as cljs]
             [compojure.route :as route]
             [ring.util.response :as resp]
             [excellent.spreadsheet :as spreadsheet]
             [excellent.db :as db]
-            [excellent.save :as save]))
+            [excellent.save :as save])
+  (:use [ring.middleware params
+                         keyword-params
+                         nested-params
+                         multipart-params])
+  )
 
 (defn generate-response [transformer data & [status]]
   (let [ret-val (transformer data)]
@@ -91,7 +92,6 @@
   (-> f doc-str (.replace "\n" " ") (.replace "-" "") .trim pr-str))
 
 (defroutes handler
-  (GET "/env" [] db/iron-cache-token)
   (GET "/" [] (get-html ""))
   (POST "/" [file] (get-html (tab-js2 file)))
 
@@ -106,11 +106,11 @@
   (POST "/spit" [name str]
         (println name)
         (println str)
-        (db/save name str)
+        (db/insert name str)
         "")
 
   (GET "/slurp" [name]
-       (db/load-str name))
+       (db/select name))
 
   (POST "/compile" [expr]
         (if (list? expr)
@@ -185,13 +185,11 @@
 (def app
   (-> handler
       ;wrap-spy
+      wrap-keyword-params
+      wrap-nested-params
+      wrap-params
       multipart/wrap-multipart-params
       wrap-clj-params
       my-wrapper
       ))
-
 (load "service")
-
-
-
-

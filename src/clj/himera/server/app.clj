@@ -16,6 +16,3 @@
 (defn -main
   [port]
   (run-jetty #'himera/app {:port (Integer. port)}))
-
-
-

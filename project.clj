@@ -1,24 +1,16 @@
-; Copyright (c) 2012 Fogus and Relevance Inc. All rights reserved.  The
-; use and distribution terms for this software are covered by the Eclipse
-; Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
-; which can be found in the file COPYING the root of this
-; distribution.  By using this software in any fashion, you are
-; agreeing to be bound by the terms of this license.  You must not
-; remove this notice, or any other, from this software.
 
 (defproject himera "0.1.0-SNAPSHOT"
   :description "ClojureScript compiler service."
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [ring/ring-core "1.2.1"]
-                 ;[prepare-cljs "0.1.0-SNAPSHOT"]
                  [org.apache.poi/poi "3.9"]
                  [org.apache.poi/poi-ooxml "3.9"]
-                 [ring "1.0.2"]
+                 [ring "1.2.1"]
                  [compojure "1.0.1"]
                  [domina "1.0.1"]
-                 ;[org.clojure/clojurescript "0.0-2014"]
-                 [org.clojure/clojurescript "0.0-1847"]
+                 [org.clojure/clojurescript "0.0-2014"]
+                 ;[org.clojure/clojurescript "0.0-1847"]
                  [com.novemberain/monger "1.5.0"]
+                 [iron_mq_clojure "1.0.3"]
                  ]
   :plugins [[lein-cljsbuild "0.3.2"]]
   :dev-dependencies [[jline "0.9.94"]

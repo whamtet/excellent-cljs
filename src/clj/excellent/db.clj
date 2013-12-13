@@ -1,6 +1,7 @@
 (ns excellent.db
   (:require [monger.core :as mg]
-            [monger.collection :as coll])
+            [monger.collection :as coll]
+            [iron-mq-clojure.client :as mq])
   (:import [org.bson.types ObjectId]))
 
 (defn getenv [env]
@@ -9,17 +10,22 @@
     (catch java.io.FileNotFoundException e (System/getenv env))
     ))
 
-(def iron-cache-token (getenv "IRON_CACHE_TOKEN"))
-(def iron-cache-project-id (getenv "IRON_CACHE_PROJECT_ID"))
+(def mongohq-url (getenv "MONGOHQ_URL"))
 
+(mg/connect-via-uri! mongohq-url)
 
-(defn save [name str]
-  (coll/insert "files" {:name name :str str}))
+(mg/set-db! (mg/get-db "app19742350"))
+
+(defn insert [name str]
+  (coll/remove "files" {:_id name})
+  (coll/insert "files" {:_id name :str str}))
 
 (defn get-all []
-  (map :name (coll/find-maps "files")))
+  (map :_id (coll/find-maps "files")))
 
-(defn load-str [name]
-  (get (coll/find-one "files" {:name name}) "name"))
+(defn select [name]
+  (get (coll/find-one "files" {:_id name}) "str"))
 
+(defn delete [name]
+  (coll/remove "files" {:_id name}))
 
