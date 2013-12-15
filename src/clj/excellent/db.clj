@@ -7,7 +7,7 @@
 (defn getenv [env]
   (try
     (-> (str "/Users/matthewmolloy/." env) slurp .trim)
-    (catch java.io.FileNotFoundException e (System/getenv env))
+    (catch Exception e (System/getenv env))
     ))
 
 (def mongohq-url (getenv "MONGOHQ_URL"))
