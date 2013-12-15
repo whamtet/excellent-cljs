@@ -12,7 +12,8 @@
 
 (def mongohq-url (getenv "MONGOHQ_URL"))
 
-(println mongohq-url)
+(for [[k v] (System/getenv)]
+  (println k ":" v))
 (mg/connect-via-uri! mongohq-url)
 
 (mg/set-db! (mg/get-db "app19742350"))
