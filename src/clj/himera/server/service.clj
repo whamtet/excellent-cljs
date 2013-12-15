@@ -18,11 +18,12 @@
             [excellent.spreadsheet :as spreadsheet]
             [excellent.db :as db]
             [excellent.save :as save]
-            clojure.pprint)
+            )
   (:use [ring.middleware params
                          keyword-params
                          nested-params
-                         multipart-params])
+                         multipart-params
+         ])
   )
 
 (defn generate-response [transformer data & [status]]
@@ -94,6 +95,7 @@
 
 (defroutes handler
   (GET "/env" [] (pr-str (for [[k v] (System/getenv)] (str k ": " v))))
+  (GET "/getenv" [env] (System/getenv env))
   (GET "/" [] (get-html ""))
   (POST "/" [file] (get-html (tab-js2 file)))
 
@@ -194,4 +196,3 @@
       wrap-body
       ))
 (load "service")
-

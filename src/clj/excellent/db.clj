@@ -12,9 +12,9 @@
 
 (def mongohq-url (getenv "MONGOHQ_URL"))
 
-(mg/connect-via-uri! mongohq-url)
+;(mg/connect-via-uri! mongohq-url)
 
-(mg/set-db! (mg/get-db "app19742350"))
+;(mg/set-db! (mg/get-db "app19742350"))
 
 (defn insert [name str]
   (coll/remove "files" {:_id name})
