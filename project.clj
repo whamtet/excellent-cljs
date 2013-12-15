@@ -10,6 +10,7 @@
                  ;[org.clojure/clojurescript "0.0-2014"]
                  [org.clojure/clojurescript "0.0-1847"]
                  [com.novemberain/monger "1.5.0"]
+                 [iron_mq_clojure "1.0.3"]
                  [ring-mock "0.1.5"]
                  ]
   :plugins [[lein-cljsbuild "0.3.2"]]
