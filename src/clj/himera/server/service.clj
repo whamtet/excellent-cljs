@@ -133,7 +133,7 @@
 
   (route/resources "/"))
 
-(defn wrap-spy [handler]
+#_(defn wrap-spy [handler]
   (fn [request]
     (println "-------------------------------")
     (println "Incoming Request:")
