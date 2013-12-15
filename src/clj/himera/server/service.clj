@@ -93,6 +93,7 @@
   (-> f doc-str (.replace "\n" " ") (.replace "-" "") .trim pr-str))
 
 (defroutes handler
+  (GET "/env" [] (pr-str (for [[k v] (System/getenv)] (str k ": " v))))
   (GET "/" [] (get-html ""))
   (POST "/" [file] (get-html (tab-js2 file)))
 
