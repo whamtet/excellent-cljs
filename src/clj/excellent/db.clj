@@ -10,13 +10,11 @@
     (catch Exception e (System/getenv env))
     ))
 
-(def mongohq-url (getenv "MONGOHQ_URL"))
+(def mongohq-url (System/getenv "MONGOHQ_URL"))
 
-(for [[k v] (System/getenv)]
-  (println k ":" v))
-;(mg/connect-via-uri! mongohq-url)
+(mg/connect-via-uri! mongohq-url)
 
-;(mg/set-db! (mg/get-db "app19742350"))
+(mg/set-db! (mg/get-db "app19742350"))
 
 (defn insert [name str]
   (coll/remove "files" {:_id name})
