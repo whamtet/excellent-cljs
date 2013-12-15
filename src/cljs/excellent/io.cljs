@@ -114,6 +114,15 @@
                         )]
     (.ajax js/jQuery params)))
 
+(defn ^:export db-delete [name]
+  (let [
+        params (map->js {:url "/delete"
+                         :data (map->js {:name name})
+                         :type "POST"}
+                        )
+        ]
+    (.ajax js/jQuery params)))
+
 
 (defn ^:export db-slurp [name]
   (let [data (atom nil)

@@ -95,9 +95,6 @@
   (GET "/" [] (get-html ""))
   (POST "/" [file] (get-html (tab-js2 file)))
 
-  (PUT "/" [name]
-       (generate-response {:hello name}))
-
   (POST "/simplecompile" [s]
         (apply-interpose "\n" (spreadsheet/clj-str->js s)))
 
@@ -121,25 +118,16 @@
               (doc-str-js f)
               (generate-js-response (cljs/compilation expr))))
           (generate-js-response (cljs/compilation expr)))
-        #_(condp = (-> expr str .trim)
-          ;"excel" (redirect "/spreadsheet.xls")
-          "excel" (straight-js "spreadsheet()")
-          "save" (straight-js "save()")
-          "load" (straight-js "himera.client.repl.load_workspace()")
-          "copy" (straight-js "s = jQuery('#workspace').val()")
-          "clear-save" (straight-js "save(); jQuery('#workspace').val('')")
-          "clear" (straight-js "jQuery('#workspace').val('')")
-          (generate-js-response (cljs/compilation expr)))
         )
   (POST "/save.clj" [savetext] (save/save savetext))
 
   (POST "/excel.xls" [exceltext] (spreadsheet/get-excel2 exceltext))
 
-  (POST "/spreadsheet.xls" [toappend] (spreadsheet/get-excel toappend))
+  ;(POST "/spreadsheet.xls" [toappend] (spreadsheet/get-excel toappend))
 
   (route/resources "/"))
 
-#_(defn wrap-spy [handler]
+(defn wrap-spy [handler]
   (fn [request]
     (println "-------------------------------")
     (println "Incoming Request:")
@@ -182,14 +170,26 @@
       (handler (assoc req :params {:s (slurp (:body req))}))
       (handler req))))
 
+(defn wrap-body
+  [handler]
+  (fn [req]
+    (let [
+          body (-> req :body slurp)
+          stream (-> body .getBytes java.io.ByteArrayInputStream.)
+          ]
+      (spit "body.txt" body)
+      (handler (assoc req :body stream :body2 body)))))
+
 (def app
   (-> handler
       ;wrap-spy
       wrap-keyword-params
-      wrap-nested-params
+      ;wrap-nested-params
       wrap-params
       multipart/wrap-multipart-params
       wrap-clj-params
       my-wrapper
+      wrap-body
       ))
 (load "service")
+
