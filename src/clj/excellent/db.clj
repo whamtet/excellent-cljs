@@ -6,7 +6,7 @@
 
 (defn getenv [env]
   (try
-    (-> (str "/Users/matthewmolloy/." env) slurp .trim)
+    (or (-> (str "/Users/matthewmolloy/." env) slurp .trim) (System/getenv env))
     (catch Exception e (System/getenv env))
     ))
 
