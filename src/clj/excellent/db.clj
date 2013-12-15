@@ -35,8 +35,3 @@
   (set-db!)
   (coll/remove "files" {:_id name}))
 
-(insert "hi" "there")
-(get-all)
-(select "hi")
-(delete "hi")
-(load "db")
