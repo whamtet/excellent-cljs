@@ -11,6 +11,7 @@
     ))
 
 (def mongohq-url (atom nil))
+
 (defn set-db! []
   (when-not @mongohq-url
     (reset! mongohq-url (getenv "MONGOHQ_URL"))
@@ -33,3 +34,9 @@
 (defn delete [name]
   (set-db!)
   (coll/remove "files" {:_id name}))
+
+(insert "hi" "there")
+(get-all)
+(select "hi")
+(delete "hi")
+(load "db")

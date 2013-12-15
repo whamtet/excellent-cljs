@@ -1,4 +1,3 @@
-
 (defproject himera "0.1.0-SNAPSHOT"
   :description "ClojureScript compiler service."
   :dependencies [[org.clojure/clojure "1.5.1"]

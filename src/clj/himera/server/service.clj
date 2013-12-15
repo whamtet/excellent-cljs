@@ -105,8 +105,8 @@
   (GET "/listfiles" [] (apply-interpose " " (db/get-all)))
 
   (POST "/spit" [name str]
-        (println name)
-        (println str)
+        ;(println name)
+        ;(println str)
         (db/insert name str)
         "")
 
@@ -126,6 +126,8 @@
   (POST "/save.clj" [savetext] (save/save savetext))
 
   (POST "/excel.xls" [exceltext] (spreadsheet/get-excel2 exceltext))
+
+  (POST "/delete" [name] (db/delete name) "")
 
   ;(POST "/spreadsheet.xls" [toappend] (spreadsheet/get-excel toappend))
 

@@ -17,5 +17,4 @@
   [port]
   (run-jetty #'himera/app {:port (Integer. port)}))
 
-
-
+(future (-main 8080))
