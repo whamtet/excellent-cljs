@@ -6,11 +6,11 @@
 
 (defn getenv [env]
   (try
-    (or (-> (str "/Users/matthewmolloy/." env) slurp .trim) (System/getenv env))
-    (catch Exception e (System/getenv env))
+    (or (-> (str "/Users/matthewmolloy/." env) slurp .trim) (get (System/getenv) env))
+    (catch Exception e (get (System/getenv) env))
     ))
 
-(def mongohq-url (System/getenv "MONGOHQ_URL"))
+(def mongohq-url (getenv "MONGOHQ_URL"))
 
 (mg/connect-via-uri! mongohq-url)
 
