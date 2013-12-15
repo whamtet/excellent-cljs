@@ -14,9 +14,9 @@
 
 (for [[k v] (System/getenv)]
   (println k ":" v))
-(mg/connect-via-uri! mongohq-url)
+;(mg/connect-via-uri! mongohq-url)
 
-(mg/set-db! (mg/get-db "app19742350"))
+;(mg/set-db! (mg/get-db "app19742350"))
 
 (defn insert [name str]
   (coll/remove "files" {:_id name})
@@ -31,3 +31,4 @@
 (defn delete [name]
   (coll/remove "files" {:_id name}))
 
+(load "db")
