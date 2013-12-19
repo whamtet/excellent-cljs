@@ -3089,11 +3089,8 @@ net.brehaut.ClojureTools = (function (SH) {
   (.click (js/jQuery &quot;#addtab&quot;))
   (set-latest-tab val))</pre></td></tr><tr><td class="docs"><p>Load contents of tab i as clojurescript.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:export load
-  [i]
-  (js/eval (repl/simple-compile (slurp i))))</pre></td></tr><tr><td class="docs"><p>Load contents of tab i as javascript.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn ^:export js-load
-  [i]
-  (js/eval (slurp i)))</pre></td></tr><tr><td class="docs">
+  [s]
+  (js/eval (repl/simple-compile s)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn ^:export list-files []
   (let [data (atom nil)
         params (map-&gt;js {:url &quot;/listfiles&quot;
