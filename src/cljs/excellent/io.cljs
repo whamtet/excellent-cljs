@@ -87,13 +87,8 @@
 
 (defn ^:export load
   "Load contents of tab i as clojurescript."
-  [i]
-  (js/eval (repl/simple-compile (slurp i))))
-
-(defn ^:export js-load
-  "Load contents of tab i as javascript."
-  [i]
-  (js/eval (slurp i)))
+  [s]
+  (js/eval (repl/simple-compile s)))
 
 
 (defn ^:export list-files []
