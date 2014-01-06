@@ -7,7 +7,8 @@
 ; remove this notice, or any other, from this software.
 
 (ns himera.server.service
-  (:use compojure.core)
+  (:use compojure.core
+        clojure.repl)
   (:require compojure.handler)
   (:require [excellent.multipart :as multipart])
   (:require [clojure.string :as string])
@@ -25,7 +26,6 @@
                          multipart-params
          ])
   )
-
 (defn generate-response [transformer data & [status]]
   (let [ret-val (transformer data)]
     {:status (or status 200)
@@ -114,6 +114,7 @@
        (db/select name))
 
   (POST "/compile" [expr]
+        (println (list? expr))
         (if (list? expr)
           (let [[doc f :as expr] expr]
             (if (= 'doc doc)
@@ -198,3 +199,4 @@
       wrap-body
       ))
 
+(load "service")
